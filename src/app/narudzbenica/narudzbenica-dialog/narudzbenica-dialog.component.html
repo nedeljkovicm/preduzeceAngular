@@ -1,0 +1,161 @@
+<mat-dialog-content>
+    <mat-toolbar style="margin-bottom: 20px; "color="primary" class="toolBar">
+        <div class="mat-display-5" *ngIf="service.createNarudzbenica">Unos nove narudzbenice</div>
+        <div class="mat-display-5" *ngIf="service.updateNarudzbenica">Izmena narudzbenice</div>
+        <div class="mat-display-5" *ngIf="service.viewNarudzbenica">Pregled narudzbenice</div>
+        <span class="fill-remaining-space"></span>
+        <button class="btn-dialog-close" mat-stroked-button (click)="close()" tabIndex="-1">
+            <mat-icon>clear</mat-icon>
+        </button>
+    </mat-toolbar>
+    <form [formGroup]="service.form" class="normal-form">
+
+        <div class="controles-container">
+            <div class="row">
+                <div class="col-md-6" *ngIf="!service.createNarudzbenica">
+                    <mat-form-field>
+                        <input formControlName="narudzbenicaId" matInput placeholder="Narudzbenica Id" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field *ngIf="service.viewNarudzbenica">
+                        <input formControlName="ukupanIznos" matInput placeholder="Ukupan iznos" readonly>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <input formControlName="datum" matInput [matDatepicker]="myDP" matInput placeholder="Datum"
+                            [readonly]="service.viewNarudzbenica">
+                        <mat-datepicker-toggle [for]="myDP" matSuffix></mat-datepicker-toggle>
+                        <mat-datepicker #myDP startView="year"></mat-datepicker>
+                        <!-- <mat-error>Obavezno polje</mat-error> -->
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="example-full-width" *ngIf="service.createNarudzbenica">
+                        <mat-label> Kupac </mat-label>
+                        <mat-select [(ngModel)]="kup" [ngModelOptions]="{standalone: true}"
+                            (ngModelChange)="getSelectedKupac($event)">
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let kupac of kupci" [value]="kupac">
+                                {{kupac.naziv}}
+                            </mat-option>
+                        </mat-select>
+    
+                    </mat-form-field>
+        
+        
+                    <mat-form-field *ngIf="service.updateNarudzbenica">
+        
+                        <mat-select placeholder="Kupac" [(ngModel)]="selectedKupac.kupacId" name="kupci" id="kupci.kupacId"
+                            #zap1="ngModel" [ngModelOptions]="{standalone: true}">
+                            <mat-option *ngFor="let kupac of kupci" [value]="kupac.kupacId">
+                                {{kupac.naziv}}
+                            </mat-option>
+                        </mat-select>
+                        
+                    </mat-form-field>
+
+                    <mat-form-field  *ngIf="service.viewNarudzbenica">
+                        <input formControlName="kupacIme" matInput placeholder="Kupac" [readonly]="service.viewNarudzbenica">
+                        
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="example-full-width" *ngIf="service.createNarudzbenica">
+                        <mat-label> Katalog </mat-label>
+                        <mat-select [(ngModel)]="kat" [ngModelOptions]="{standalone: true}"
+                            (ngModelChange)="getSelectedKatalog($event)" [disabled]="service.izabranKatalog">
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let katalog of katalozi" [value]="katalog">
+                                {{katalog.naziv}}
+                            </mat-option>
+                        </mat-select>
+                        
+                    </mat-form-field>
+        
+        
+                    <!-- <mat-form-field *ngIf="service.updateNarudzbenica">
+        
+                        <mat-select placeholder="Katalog" [(ngModel)]="selectedKatalog.katalogId" name="katalozi" id="katalozi.katalogId"
+                            #kat="ngModel" [ngModelOptions]="{standalone: true}" (ngModelChange)="getSelectedKatalog($event)">
+                            <mat-option *ngFor="let katalog of katalozi" [value]="katalog.katalogId">
+                                {{katalog.naziv}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+
+                    <mat-form-field  *ngIf="!service.createNarudzbenica">
+                        <input formControlName="katalogIme" matInput placeholder="Katalog" [readonly]="!service.createKatalog">
+                        
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field *ngIf="!service.createNarudzbenica">
+                        <input formControlName="status" matInput placeholder="Status" readonly>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <br>
+            
+    </form>
+    <!-- <form [formGroup]="service.formStavke" class="normal-form">
+        <div id="stavke" class="controles-container" *ngIf="!service.viewNarudzbenica" >
+            <fieldset>
+                <legend style="color:grey; font-size: 18px;">Unos stavke narudzbenice</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    
+                    <mat-form-field>
+                        <input formControlName="nazivIgracke" matInput placeholder="Naziv igracke">
+                        <mat-error>Obavezno polje</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input formControlName="opisIgracke" matInput placeholder="Opis igracke">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input formControlName="kolicina" matInput placeholder="Kolicina">
+                        <mat-error>Obavezno polje</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input formControlName="cenaIgracke" matInput placeholder="Cena">
+                        <mat-error>Obavezno polje</mat-error>
+                    </mat-form-field>
+                    <button mat-icon-button *ngIf="!service.viewNarudzbenica" color="primary" matTooltip="Potvrdi" (click)="addUpdateStavka()"
+                    [disabled]="service.formStavke.invalid">
+                        <mat-icon>done</mat-icon>
+                    </button> 
+                </div>
+                
+            </div>
+        </fieldset>
+        </div>
+
+    </form> -->
+
+    <app-tabela-stavke-kataloga  *ngIf="!service.viewNarudzbenica"></app-tabela-stavke-kataloga>
+    
+    <br>
+    <!-- <app-stavka-narudzbenice *ngIf="!service.viewNarudzbenica"></app-stavka-narudzbenice> -->
+    <br>
+    <app-tabela-stavke></app-tabela-stavke>
+    <br>
+    <br>
+    <button class="save" mat-raised-button *ngIf="service.createNarudzbenica" color="primary" (click)="save()"
+        [disabled]="service.form.invalid">Sačuvaj</button>
+    <button class="update1" mat-raised-button *ngIf="service.updateNarudzbenica" color="primary" (click)="update()"
+        [disabled]="service.form.invalid">Izmeni</button>
+    <br>
+    <br>
+    <button class="update2" mat-raised-button *ngIf="service.updateNarudzbenica" style="background-color: rgb(0, 142, 207); color: white;" (click)="updateZakljuci()"
+        [disabled]="service.form.invalid">Izmeni i Zakljuci</button>
+</mat-dialog-content>

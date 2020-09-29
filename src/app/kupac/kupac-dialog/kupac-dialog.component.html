@@ -1,0 +1,57 @@
+<mat-toolbar color="primary" class="toolBar" style="margin-bottom: 20px;">
+    <div class="mat-display-5" *ngIf="service.createKupac">Unos novog kupca</div>
+    <div class="mat-display-5" *ngIf="service.updateKupac">Izmena kupca</div>
+    <div class="mat-display-5" *ngIf="service.viewKupac">Pregled kupca</div>
+    <span class="fill-remaining-space"></span>
+    <button class="btn-dialog-close" mat-stroked-button (click)="close()" tabIndex="-1">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </mat-toolbar>
+  <form [formGroup]="service.form" class="normal-form">
+  
+    <div class="controles-container">
+      <div class="row" *ngIf="!service.createKupac">
+        <div class="col-md-6">
+          <mat-form-field>
+            <input formControlName="kupacId" matInput placeholder="Kupac Id" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field>
+            <input formControlName="naziv" matInput placeholder="Naziv" [readonly]="service.viewKupac">
+            <mat-error>Obavezno polje</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <input formControlName="pib" matInput placeholder="PIB" [readonly]="service.viewKupac">
+            <mat-error>Obavezno polje</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field>
+            <input formControlName="adresa" matInput placeholder="Adresa"
+              [readonly]="service.viewKupac">
+              <mat-error>Obavezno polje</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <input formControlName="kontaktTel" matInput placeholder="Kontakt telefon" [readonly]="service.viewKupac">
+            <mat-error>Obavezno polje</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <button mat-raised-button *ngIf="service.createKupac" color="primary" (click)="save()"
+        [disabled]="service.form.invalid">Sačuvaj</button>
+      <button mat-raised-button color="warn" (click)="clear()" *ngIf="service.createKupac">Očisti polja forme</button>
+      <button mat-raised-button *ngIf="service.updateKupac" color="primary" (click)="update()"
+        [disabled]="service.form.invalid">Izmeni</button>
+    </div>
+  
+  </form>
